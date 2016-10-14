@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchPerson, fetchEndorsements } from "../actions/personActions";
+import { fetchPerson, fetchEndorsements, updatePerson } from "../actions/personActions";
 import { ListGroup, ListGroupItem, Image, Panel,Button, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 
 @connect((store) => {
@@ -10,50 +10,69 @@ import { ListGroup, ListGroupItem, Image, Panel,Button, FormGroup, ControlLabel,
 })
 export default class PersonEdit extends React.Component {
   state = {
-    name: '',
-    address: '',
-    phone: '',
-    position: '',
-    status: '',
-    email: '',
+    name: null,
+    position: null,
+    status: null,
+    about: null,
+    address: null,
+    phone: null,
+    email: null,
+    experience: null,
    };
+
   constructor(props) {
       super(props);
+      const { requestedPerson } = this.props.params;
       // Operations usually carried out in componentWillMount go here
-      this.props.dispatch(fetchPerson('Brendan'));
+      this.props.dispatch(fetchPerson(requestedPerson));
     }
 
-    handleInputChange(event) {
-       this.setState({ [event.target.id]: event.target.value });
+    handleInputChange(key, event) {
+       this.setState({ [key]: event.target.value });
      }
-     handleInputSubmit() {
-     this.props.dispatch(createPost(this.state.post));
+
+     handleFormSubmit() {
+       const { requestedPerson } = this.props.params;
+       this.props.dispatch(updatePerson(requestedPerson, this.state));
      }
+
   render() {
+    const { requestedPerson } = this.props.params;
     const { person } = this.props;
+    const mappedPerson = (person ?  Object.keys(person).map((key) =>{
+      if(key !== 'endorsements'){
+        return <p key={key}>{person[key]}</p>
+      } else{
+        return null;
+      }
+    }) : null);
 
-    return <div>
-
-          <Panel header="Name">
-          <h5>{person.name}</h5>
-          <FormGroup>
+    const mappedPersonForm = Object.keys(this.state).map((key) => {
+      return <div key={key}>
+        <FormGroup>
+        <ControlLabel>{key}</ControlLabel>
           <FormControl
               type="text"
-              value={this.state.name}
+              value={this.state[key]}
               placeholder="Edit"
-              id="name"
-              onChange={this.handleInputChange.bind(this)}
-            />
-            <Button bsStyle="primary" onClick={() => this.handleInputSubmit()}>Update</Button>
+              onChange={this.handleInputChange.bind(this, key)}
+              />
+              </FormGroup>
+      </div>
+    })
 
-          </FormGroup>
-          </Panel>
-          <p>{person.address}</p>
-          <p>{person.email}</p>
-          <p>{person.phone}</p>
-          <p>{person.position}</p>
-          <p>{person.status}</p>
-          <p>{person.about}</p>
+    const editPersonView = <div style={{display:'flex'}}>
+        <div style={{width:'50%'}}>
+          <h2>Current Info.</h2>
+          {mappedPerson}
         </div>
+        <div style={{width:'50%'}}>
+          <h2>Edit personal Info</h2>
+          {mappedPersonForm}
+          <Button bsStyle="primary" onClick={() => this.handleFormSubmit()}>Update</Button>
+        </div>
+      </div>;
+
+    return <div>{typeof requestedPerson === 'string'  ? editPersonView : <div><h3>No person choosen to edit.</h3></div>}</div>
   }
 }

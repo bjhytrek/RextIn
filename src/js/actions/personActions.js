@@ -30,3 +30,20 @@
       });
     };
   }
+  export function updatePerson(person, update) {
+    // console.log(person, update);
+    var updates = {};
+    Object.keys(update).map((key) =>{
+      if(update[key] !== null){
+        updates[key] = update[key];
+      }
+    });
+    return dispatch => {
+      Fb.ref('people/'+person+'/').update(updates);
+    };
+  }
+  export function endorse(person, endorsement) {
+    return dispatch => {
+      Fb.ref('people/'+person+'/endorsements').push(endorsement);
+    }
+  }

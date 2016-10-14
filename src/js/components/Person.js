@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchPerson, fetchEndorsements } from "../actions/personActions";
-import { ListGroup, ListGroupItem, Image, Panel } from "react-bootstrap";
+import { fetchPerson, fetchEndorsements, endorse } from "../actions/personActions";
+import { ListGroup, ListGroupItem, Image, Panel, FormGroup, ControlLabel, Form, FormControl, Button } from "react-bootstrap";
 
 @connect((store) => {
   return {
@@ -10,18 +10,31 @@ import { ListGroup, ListGroupItem, Image, Panel } from "react-bootstrap";
   };
 })
 export default class Person extends React.Component {
+  state = {
+      post: '',
+      poster: '',
+}
   constructor(props) {
       super(props);
+      const { requestedPerson } = this.props;
       // Operations usually carried out in componentWillMount go here
-      this.props.dispatch(fetchPerson('Brendan'));
-      this.props.dispatch(fetchEndorsements('Brendan'));
+      this.props.dispatch(fetchPerson(requestedPerson));
+      this.props.dispatch(fetchEndorsements(requestedPerson));
     }
+    handleInputChange(key, event) {
+      this.setState({ [key]: event.target.value });
+  }
 
+     handleFormSubmit() {
+       const { requestedPerson } = this.props;
+       this.props.dispatch(endorse(requestedPerson, this.state));
+     }
   render() {
-    const { person, endorsements } = this.props;
-    const mappedEndorsements = Object.keys(endorsements).map((key) => {
+    const { person, endorsements, requestedPerson} = this.props;
+
+    const mappedEndorsements = (endorsements ? Object.keys(endorsements).map((key) => {
       return <ListGroupItem key={key} header={endorsements[key].post}>{endorsements[key].poster}</ListGroupItem>;
-    });
+    }) : null)
 
     return <div style={{display: 'flex'}}>
       <section>
@@ -41,6 +54,28 @@ export default class Person extends React.Component {
         </div>
         <h3>Endorsements</h3>
         <ListGroup>{mappedEndorsements}</ListGroup>
+        <div>
+            <Form inline>
+                <FormGroup>
+                    <FormControl
+                        type="text"
+                        value={this.state.post}
+                        placeholder={"Endorse "+requestedPerson+" here"}
+                        onChange={this.handleInputChange.bind(this, 'post')}
+                        />
+
+                </FormGroup>
+                <FormGroup style={{marginLeft: '1rem'}}>
+                    <FormControl
+                        type="text"
+                        value={this.state.poster}
+                        placeholder="Your Name:"
+                        onChange={this.handleInputChange.bind(this, 'poster')}
+                        />
+                </FormGroup>
+                </Form>
+                <Button bsStyle="primary" onClick={() => this.handleFormSubmit()}>Endorse</Button>
+              </div>
       </section>
 
         </div>

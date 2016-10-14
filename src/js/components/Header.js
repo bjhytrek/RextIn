@@ -1,16 +1,36 @@
 import React from "react";
 import { Navbar, NavItem, Nav } from 'react-bootstrap';
+import { connect } from "react-redux";
 import { Link } from 'react-router';
-// @connect((store) => {
-//   return {
-//     title: 'Splatters',
-//   };
-// })
-export default class Header extends React.Component {
+import Login from './Login.js';
+import { signOut, fetchUser, } from "../actions/userActions";
 
+@connect((store) => {
+  return {
+    activeUser: store.user.activeUser,
+    error: store.user.error,
+    message: store.user.message,
+  };
+})
+export default class Header extends React.Component {
+  constructor(props) {
+      super(props);
+      // Operations usually carried out in componentWillMount go here
+      this.props.dispatch(fetchUser());
+    }
+  handleSignOut(){
+    this.props.dispatch(signOut());
+  }
+  handleModalClick(){
+    this.props.dispatch(toggleModal());
+  }
 
   render() {
-
+    if(this.props.activeUser == false) {
+      var activeUser = null;
+    }else {
+      var activeUser = this.props.activeUser[0];
+    };
     return <header>
         <Navbar inverse>
         <Navbar.Header>
@@ -24,9 +44,10 @@ export default class Header extends React.Component {
           <li><Link to="People">People</Link></li>
           <li><Link to="Teams">Teams</Link></li>
           <li><Link to="ContactUs">Contact Us</Link></li>
-          <li><Link to="Todo">Todo</Link></li>
         </Nav>
 
+
+          {activeUser ? <Nav pullRight><NavItem href="#">{activeUser.email}</NavItem><NavItem  onClick={()=>{this.handleSignOut()}}>Sign Out</NavItem></Nav> : <Login />}
         </Navbar.Collapse>
         </Navbar>
         </header>

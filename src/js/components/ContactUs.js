@@ -3,31 +3,11 @@ import { connect } from "react-redux";
 import { FormGroup, ControlLabel, FormControl, HelpBlock, Button } from 'react-bootstrap';
 import GoogleMapWrapper from "./GoogleMapWrapper.js";
  const ContactUs = React.createClass({
-   getInitialState() {
-    return {
-      name: {
-        value: ''
-      },
-      email: {
-        value: ''
-      },
-      phone: {
-        value: ''
-      },
-      message: {
-        value: ''
-      },
-    };
-  },
-
-  handleChange(e) {
-    this.setState({ value: e.target.value });
-  },
 
   render() {
 
     return <div>
-      <h1>Come Play With Us!</h1>
+      <h1>RBDC Rexburg, Idaho.</h1>
       <div style={{display: 'flex'}}>
       <section className="contact-section">
         <h3>Location</h3>
