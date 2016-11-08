@@ -30,8 +30,8 @@ export default class Login extends React.Component {
   handleInputChange(key, event) {
     this.setState({ [key]: event.target.value });
   }
-  handleSignIn(email, password) {
-    event.preventDefault()
+  handleSignIn() {
+
     this.props.dispatch(loginUser(this.state.email, this.state.password));
   }
 
@@ -41,10 +41,11 @@ export default class Login extends React.Component {
         <li><Link to="Register">Register</Link></li>
         </Nav>
       <Modal show={this.state.showModal} onHide={()=> {this.close()}}>
+      <Form horizontal >
         <Modal.Header>
           <Modal.Title>Login/Register</Modal.Title>
         </Modal.Header>
-        <Form horizontal>
+
         <Modal.Body>
 
             <FormGroup>
@@ -77,7 +78,7 @@ export default class Login extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           {this.props.error}
-          <Button type="submit" bsStyle="primary" onClick={()=>{this.handleSignIn()}}>Login</Button>
+          <Button onClick={()=>{this.handleSignIn()}} bsStyle="primary" >Login</Button>
         </Modal.Footer>
         </Form>
     </Modal>

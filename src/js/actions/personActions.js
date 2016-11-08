@@ -12,7 +12,7 @@
 
   export function fetchPerson(person) {
     return dispatch => {
-      Fb.ref('people/'+person).on('value', snapshot =>{
+      Fb.ref('users/'+person).on('value', snapshot =>{
         dispatch({
           type: 'FETCH_PERSON_FULFILLED',
           payload: snapshot.val()
@@ -22,7 +22,7 @@
   }
   export function fetchEndorsements(person) {
     return dispatch => {
-      Fb.ref('people/'+person+'/endorsements').on('value', snapshot =>{
+      Fb.ref('users/'+person+'/endorsements').on('value', snapshot =>{
         dispatch({
           type: 'FETCH_ENDORSEMENTS_FULFILLED',
           payload: snapshot.val()
@@ -39,11 +39,11 @@
       }
     });
     return dispatch => {
-      Fb.ref('people/'+person+'/').update(updates);
+      Fb.ref('users/'+person+'/').update(updates);
     };
   }
-  export function endorse(person, endorsement) {
+  export function endorse(person, endorser, endorsement) {
     return dispatch => {
-      Fb.ref('people/'+person+'/endorsements').push(endorsement);
+      Fb.ref('users/'+person+'/endorsements').push({endorsement, endorser});
     }
   }

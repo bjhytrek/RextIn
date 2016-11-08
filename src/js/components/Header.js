@@ -17,7 +17,22 @@ export default class Header extends React.Component {
       super(props);
       // Operations usually carried out in componentWillMount go here
       this.props.dispatch(fetchUser());
+
     }
+    // componentWillReceiveProps(nextProps){
+    //   if(nextProps.activeUser !== this.state.activeUser){
+    //     console.log("from header ",this.props.activeUser)
+    //     if(this.props.activeUser){
+    //       const { location } = this.props;
+    //       console.log("active user, checking route.")
+    //       if (location.state && location.state.nextPathname) {
+    //         this.props.router.replace(location.state.nextPathname)
+    //       } else {
+    //         this.props.router.replace('/')
+    //       }
+    //     }
+    //   }
+    // }
   handleSignOut(){
     this.props.dispatch(signOut());
   }

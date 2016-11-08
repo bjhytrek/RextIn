@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link, withRouter } from 'react-router';
-import { signUp } from "../actions/userActions";
+import { signUp, fetchUser } from "../actions/userActions";
 import { Alert, Modal, Button, Form, FormGroup, FormControl, ControlLabel, Col, Nav, NavItem } from "react-bootstrap";
 
 @connect((store) => {
   return {
+    activeUser: store.user.activeUser,
     error: store.user.error,
   };
 })
@@ -15,21 +16,30 @@ export default withRouter(class Register extends React.Component {
     password: null,
     password2: null,
     name: null,
-    phone: null,
-    address: null,
-    about: null,
-    status: null,
-    position: null,
+    phone: '',
+    address: '',
+    about: '',
+    status: '',
+    position: '',
+    experience: '',
+
   }
   constructor(props) {
       super(props);
       // Operations usually carried out in componentWillMount go here
     }
-
+  componentWillReceiveProps(nextProps){
+    console.log("componentWillRecieveProps run,")
+    if(nextProps.activeUser){
+      console.log("nextProps.activeUser: true, reroute.")
+      this.props.router.push("/");
+    }
+  }
   handleInputChange(key, event) {
     this.setState({ [key]: event.target.value });
   }
   validate(){
+    event.preventDefault();
     const { email, password, password2, name, position } = this.state;
     if(email && password && password2 && name && position){
       if(password === password2){
@@ -43,14 +53,16 @@ export default withRouter(class Register extends React.Component {
     }
   }
   handleSignUp() {
-    this.props.dispatch(signUp(this.state));
+    this.props.dispatch(signUp(this.state))
+
+
   }
 
   render() {
     return <div>
         <h2>User Registration</h2>
         {this.props.error ? <Alert bsStyle="warning">{this.props.error}</Alert> : null}
-        <Form horizontal>
+        <Form onSubmitCapture={()=>{this.validate()}} horizontal>
         <h4>Required Info:</h4>
             <FormGroup>
               <Col componentClass={ControlLabel} sm={2}>
@@ -158,7 +170,7 @@ export default withRouter(class Register extends React.Component {
                       />
               </Col>
             </FormGroup>
-            <Button style={{float:'right'}} bsStyle="primary" onClick={()=>{this.validate()}}>Register</Button>
+            <Button type="submit" style={{float:'right'}} bsStyle="primary">Register</Button>
 
             </Form>
   </div>

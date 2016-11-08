@@ -63,6 +63,8 @@ export function signUp(newUser) {
            address: newUser.address,
            about: newUser.about,
            status: newUser.status,
+           experience: newUser.experience,
+           endorsements: true,
          });
         dispatch({
           type: 'SIGNUP_USER_FULFILLED',

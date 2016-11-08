@@ -24,7 +24,7 @@ export default class People extends React.Component {
     const { people } = this.props;
 
     const mappedPeople = Object.keys(people).map((key) => {
-      return <li key={key}><Link to={"people/"+key}>{key}</Link></li>;
+      return <li key={key}><Link to={"people/"+[key]}>{people[key].name}</Link></li>;
     })
     const teamList = <div>
       <h1>RExt Team Members:</h1>

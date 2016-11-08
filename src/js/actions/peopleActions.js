@@ -4,7 +4,7 @@ var firebase = require("firebase");
 
    export function fetchPeople() {
      return dispatch => {
-       Fb.ref('people/').on('value', snapshot =>{
+       Fb.ref('users/').on('value', snapshot =>{
          dispatch({
            type: 'FETCH_PEOPLE_FULFILLED',
            payload: snapshot.val()

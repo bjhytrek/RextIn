@@ -1,14 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
+import { withRouter } from 'react-router';
 import { fetchPerson, fetchEndorsements, updatePerson } from "../actions/personActions";
 import { ListGroup, ListGroupItem, Image, Panel,Button, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 
 @connect((store) => {
   return {
+    activeUser: store.user.activeUser,
     person: store.person.person,
   };
 })
-export default class PersonEdit extends React.Component {
+export default withRouter(class PersonEdit extends React.Component {
   state = {
     name: null,
     position: null,
@@ -26,7 +28,13 @@ export default class PersonEdit extends React.Component {
       // Operations usually carried out in componentWillMount go here
       this.props.dispatch(fetchPerson(requestedPerson));
     }
-
+    componentWillReceiveProps(nextProps){
+      console.log("componentWillRecieveProps run,")
+      if(!nextProps.activeUser){
+        console.log("nextProps.activeUser: true, reroute.")
+        this.props.router.push("/");
+      }
+    }
     handleInputChange(key, event) {
        this.setState({ [key]: event.target.value });
      }
@@ -75,4 +83,4 @@ export default class PersonEdit extends React.Component {
 
     return <div>{typeof requestedPerson === 'string'  ? editPersonView : <div><h3>No person choosen to edit.</h3></div>}</div>
   }
-}
+})

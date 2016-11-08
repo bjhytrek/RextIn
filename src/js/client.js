@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, Redirect, IndexRoute, hashHistory } from 'react-router';
 import Layout from "./components/Layout";
 import Home from './components/Home';
 import People from './components/People';
@@ -21,14 +21,14 @@ import Register from './components/Register';
 
 
 const router = (
-  <Router history={browserHistory}>
+  <Router history={hashHistory}>
     <Route path="/" component={Layout}>
       <IndexRoute components={Home} />
       <Route path="people(/:requestedPerson)" component={People} />
       <Route path="personEdit(/:requestedPerson)" component={PersonEdit} />
       <Route path="teams" component={Teams} />
       <Route path="contactUs" component={ContactUs} />
-      <Route path="register" component={Register} />
+      <Route path="Register" component={Register} />
     </Route>
   </Router>
 )
